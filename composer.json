@@ -1,0 +1,14 @@
+{
+    "name": "garagist/imagedirectory",
+    "description": "Returns DataStructure for used images on a website",
+    "type": "neos-plugin",
+    "license": "GPL-3.0-or-later",
+    "require": {
+        "flowpack/neos-asset-usage": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Garagist\\ImageDirectory\\": "Classes/"
+        }
+    }
+}

@@ -1,0 +1,14 @@
+Neos:
+  Fusion:
+    defaultContext:
+      Garagist.ImageDirectory: 'Garagist\ImageDirectory\EelHelper\ImageDirectoryHelper'
+  Neos:
+    fusion:
+      autoInclude:
+        Garagist.ImageDirectory: true
+
+Garagist:
+  ImageDirectory:
+    prefixCopyright: '© '
+    defaultCopyright: null
+    imageWidth: 200

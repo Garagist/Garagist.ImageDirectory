@@ -1,0 +1,43 @@
+prototype(Garagist.ImageDirectory:DataStructure) < prototype(Neos.Fusion:Component) {
+    @propTypes {
+        prefixCopyright = ${PropTypes.string}
+        defaultCopyright = ${PropTypes.string}
+        imageWidth = ${PropTypes.integer}
+    }
+
+    list = ${Garagist.ImageDirectory.list(site)}
+
+    prefixCopyright = ${Configuration.setting('Garagist.ImageDirectory.prefixCopyright')}
+    defaultCopyright = ${Configuration.setting('Garagist.ImageDirectory.defaultCopyright')}
+    imageWidth = ${Configuration.setting('Garagist.ImageDirectory.imageWidth')}
+
+    renderer = Neos.Fusion:Map {
+        @process.filter = ${Array.filter(value)}
+        items = ${props.list}
+        itemRenderer = Neos.Fusion:DataStructure {
+            @if.isImage = ${Type.instance(item.asset, 'Neos\Media\Domain\Model\ImageInterface')}
+            asset = ${item.asset}
+            title = ${item.asset['title']}
+            caption = ${item.asset['caption']}
+            copyright = ${item.asset['copyrightNotice'] || props.defaultCopyright}
+            copyright.@process.prefix = ${value ? props.prefixCopyright + value : null}
+            imageWidth = ${props.imageWidth}
+
+            imageUri = Neos.Neos:ImageUri {
+                asset = ${item.asset}
+                width = ${props.imageWidth}
+            }
+
+            documents = Neos.Fusion:Map {
+                items = ${item.documents}
+                itemName = 'document'
+                itemRenderer = Neos.Fusion:DataStructure {
+                    @apply.document = ${document}
+                    nodeUri = Neos.Neos:NodeUri {
+                        node = ${document.node}
+                    }
+                }
+            }
+        }
+    }
+}
