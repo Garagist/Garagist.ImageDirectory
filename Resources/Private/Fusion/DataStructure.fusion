@@ -39,6 +39,7 @@ prototype(Garagist.ImageDirectory:DataStructure) < prototype(Neos.Fusion:Compone
                         @if.isImage = ${Type.instance(asset, 'Neos\Media\Domain\Model\ImageInterface')}
                         asset = ${asset}
                         width = ${props.imageWidth}
+                        async = true
                     }
                 }
             }
