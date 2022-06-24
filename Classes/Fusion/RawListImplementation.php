@@ -236,16 +236,22 @@ class RawListImplementation extends AbstractFusionObject
      * @param AssetInterface $asset
      * @return boolean
      */
-    protected function assetHasCorrectInstance(AssetInterface $asset): bool
+    protected function assetHasCorrectInstance(?AssetInterface $asset): bool
     {
+        if (!isset($asset)) {
+            return false;
+        }
+
         if (!isset($this->instances)) {
             return true;
         }
+
         foreach ($this->instances as $expectedObjectType) {
             if ($asset instanceof $expectedObjectType) {
                 return true;
             }
         }
+
         return false;
     }
 }
