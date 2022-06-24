@@ -4,6 +4,7 @@
     "type": "neos-plugin",
     "license": "GPL-3.0-or-later",
     "require": {
+        "php": "^8.0",
         "flowpack/neos-asset-usage": "^0.2"
     },
     "autoload": {

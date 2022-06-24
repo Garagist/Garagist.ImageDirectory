@@ -5,13 +5,14 @@ namespace Garagist\ImageDirectory\Fusion;
 use Flowpack\EntityUsage\Service\EntityUsageService;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Eel\FlowQuery\FlowQuery;
-use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Fusion\Exception as FusionException;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
 use Neos\Media\Domain\Model\AssetInterface;
 use Neos\Media\Domain\Repository\AssetRepository;
 use function json_encode;
+use function strtolower;
+use function str_starts_with;
 
 /**
  * Returns the list of assets used on a site
@@ -38,11 +39,11 @@ class RawListImplementation extends AbstractFusionObject
     protected $items;
 
     /**
-     * An internal cache for the instance types for assets
+     * An internal cache for the media types for assets
      *
      * @var array
      */
-    protected $instances;
+    protected $mediaTypes;
 
     /**
      * Internal cache for the renderHiddenInIndex property.
@@ -96,9 +97,9 @@ class RawListImplementation extends AbstractFusionObject
         $fusionContext = $this->runtime->getCurrentContext();
         $startingPoint = $this->fusionValue('startingPoint');
         $startingPoint = $startingPoint ?: $fusionContext['site'];
-        $instances = $this->fusionValue('instances');
-        if ($instances && is_string($instances)) {
-            $this->instances = explode(',', $instances);
+        $mediaTypes = $this->fusionValue('mediaTypes');
+        if ($mediaTypes && is_string($mediaTypes)) {
+            $this->mediaTypes = explode(',', strtolower(str_replace('/*', '/', $mediaTypes)));
         }
         $this->assetUsage = $this->assetUsageService->getAllUsages();
         $this->dimensions = json_encode($startingPoint->getDimensions());
@@ -211,7 +212,7 @@ class RawListImplementation extends AbstractFusionObject
             /** @var AssetInterface $asset */
             $asset = $this->assetRepository->findByIdentifier($id);
 
-            if ($this->assetHasCorrectInstance($asset)) {
+            if ($this->assetHasCorrectMediaType($asset)) {
                 $assetEntries[$id] = $asset;
             }
         }
@@ -236,18 +237,19 @@ class RawListImplementation extends AbstractFusionObject
      * @param AssetInterface $asset
      * @return boolean
      */
-    protected function assetHasCorrectInstance(?AssetInterface $asset): bool
+    protected function assetHasCorrectMediaType(?AssetInterface $asset): bool
     {
         if (!isset($asset)) {
             return false;
         }
 
-        if (!isset($this->instances)) {
+        if (!isset($this->mediaTypes)) {
             return true;
         }
 
-        foreach ($this->instances as $expectedObjectType) {
-            if ($asset instanceof $expectedObjectType) {
+        $mediaType = strtolower($asset->getMediaType());
+        foreach ($this->mediaTypes as $expectedType) {
+            if (str_starts_with($mediaType, $expectedType)) {
                 return true;
             }
         }

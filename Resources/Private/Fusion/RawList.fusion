@@ -1,12 +1,12 @@
 prototype(Garagist.ImageDirectory:RawList) {
-  @class = 'Garagist\\ImageDirectory\\Fusion\\RawListImplementation'
+    @class = 'Garagist\\ImageDirectory\\Fusion\\RawListImplementation'
 
-  startingPoint = ${site}
-  renderHiddenInIndex = true
+    startingPoint = ${site}
+    renderHiddenInIndex = true
 
-  # Comma seperated list
-  instances = 'Neos\\Media\\Domain\\Model\\ImageInterface'
+    # Comma seperated list
+    mediaTypes = 'image/*,video/*'
 
-  # Comma seperated list
-  filter = 'Neos.Neos:Document,!Neos.Neos:Shortcut'
+    # Comma seperated list
+    filter = 'Neos.Neos:Document,!Neos.Neos:Shortcut'
 }

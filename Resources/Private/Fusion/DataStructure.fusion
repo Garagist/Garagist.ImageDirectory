@@ -30,11 +30,15 @@ prototype(Garagist.ImageDirectory:DataStructure) < prototype(Neos.Fusion:Compone
                 items = ${document.assets}
                 itemName = 'asset'
                 itemRenderer = Neos.Fusion:DataStructure {
+                    mediaType = ${asset['mediaType']}
                     title = ${asset['title']}
                     caption = ${asset['caption']}
                     copyright = ${asset['copyrightNotice'] || props.defaultCopyright}
                     copyright.@process.prefix = ${value ? props.prefixCopyright + value : null}
                     imageWidth = ${props.imageWidth}
+                    uri = Neos.Fusion:ResourceUri {
+                        resource = ${asset.resource}
+                    }
                     imageUri = Neos.Neos:ImageUri {
                         @if.isImage = ${Type.instance(asset, 'Neos\Media\Domain\Model\ImageInterface')}
                         asset = ${asset}
