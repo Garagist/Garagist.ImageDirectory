@@ -9,8 +9,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Media\Domain\Model\AssetInterface;
 use Neos\Eel\FlowQuery\FlowQuery;
 use Neos\Media\Domain\Repository\AssetRepository;
-
-use function Neos\Flow\var_dump;
+use function json_encode;
 
 class ImageDirectoryHelper implements ProtectedContextAwareInterface
 {
