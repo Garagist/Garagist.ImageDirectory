@@ -4,7 +4,7 @@
     "type": "neos-plugin",
     "license": "GPL-3.0-or-later",
     "require": {
-        "flowpack/neos-asset-usage": "*"
+        "flowpack/neos-asset-usage": "^0.2"
     },
     "autoload": {
         "psr-4": {
