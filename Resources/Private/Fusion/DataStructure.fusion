@@ -5,7 +5,7 @@ prototype(Garagist.ImageDirectory:DataStructure) < prototype(Neos.Fusion:Compone
         imageWidth = ${PropTypes.integer}
     }
 
-    list = ${Garagist.ImageDirectory.list(site)}
+    rawList = Garagist.ImageDirectory:RawList
 
     prefixCopyright = ${Configuration.setting('Garagist.ImageDirectory.prefixCopyright')}
     defaultCopyright = ${Configuration.setting('Garagist.ImageDirectory.defaultCopyright')}
@@ -13,28 +13,32 @@ prototype(Garagist.ImageDirectory:DataStructure) < prototype(Neos.Fusion:Compone
 
     renderer = Neos.Fusion:Map {
         @process.filter = ${Array.filter(value)}
-        items = ${props.list}
+        items = ${props.rawList}
+        itemName = 'document'
         itemRenderer = Neos.Fusion:DataStructure {
-            @if.isImage = ${Type.instance(item.asset, 'Neos\Media\Domain\Model\ImageInterface')}
-            asset = ${item.asset}
-            title = ${item.asset['title']}
-            caption = ${item.asset['caption']}
-            copyright = ${item.asset['copyrightNotice'] || props.defaultCopyright}
-            copyright.@process.prefix = ${value ? props.prefixCopyright + value : null}
-            imageWidth = ${props.imageWidth}
-
-            imageUri = Neos.Neos:ImageUri {
-                asset = ${item.asset}
-                width = ${props.imageWidth}
+            nodeUri = Neos.Neos:NodeUri {
+                node = ${document.node}
             }
+            label = ${document.label}
+            title = ${document.title}
+            identifier = ${document.identifier}
+            nodeType = ${document.nodeType}
+            node = ${document.node}
 
-            documents = Neos.Fusion:Map {
-                items = ${item.documents}
-                itemName = 'document'
+            assets = Neos.Fusion:Map {
+                @process.filter = ${Array.filter(value)}
+                items = ${document.assets}
+                itemName = 'asset'
                 itemRenderer = Neos.Fusion:DataStructure {
-                    @apply.document = ${document}
-                    nodeUri = Neos.Neos:NodeUri {
-                        node = ${document.node}
+                    title = ${asset['title']}
+                    caption = ${asset['caption']}
+                    copyright = ${asset['copyrightNotice'] || props.defaultCopyright}
+                    copyright.@process.prefix = ${value ? props.prefixCopyright + value : null}
+                    imageWidth = ${props.imageWidth}
+                    imageUri = Neos.Neos:ImageUri {
+                        @if.isImage = ${Type.instance(asset, 'Neos\Media\Domain\Model\ImageInterface')}
+                        asset = ${asset}
+                        width = ${props.imageWidth}
                     }
                 }
             }

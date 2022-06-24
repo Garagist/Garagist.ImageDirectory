@@ -1,7 +1,4 @@
 Neos:
-  Fusion:
-    defaultContext:
-      Garagist.ImageDirectory: 'Garagist\ImageDirectory\EelHelper\ImageDirectoryHelper'
   Neos:
     fusion:
       autoInclude:
