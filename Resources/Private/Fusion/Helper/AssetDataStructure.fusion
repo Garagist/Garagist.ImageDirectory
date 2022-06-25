@@ -1,0 +1,26 @@
+prototype(Garagist.ImageDirectory:Helper.AssetDataStructure) < prototype(Neos.Fusion:Component) {
+    asset = null
+    defaultCopyright = null
+    prefixCopyright = null
+    imageWidth = null
+
+    @if.hasAsset = ${this.asset}
+    renderer = Neos.Fusion:DataStructure {
+        @ignoreProperties = ${['asset', 'defaultCopyright', 'prefixCopyright']}
+        @apply.props = ${props}
+        mediaType = ${props.asset['mediaType']}
+        title = ${props.asset['title']}
+        caption = ${props.asset['caption']}
+        copyright = ${props.asset['copyrightNotice'] || props.defaultCopyright}
+        copyright.@process.prefix = ${value ? props.prefixCopyright + value : null}
+        uri = Neos.Fusion:ResourceUri {
+            resource = ${props.asset.resource}
+        }
+        imageUri = Neos.Neos:ImageUri {
+            @if.isImage = ${Type.instance(props.asset, 'Neos\Media\Domain\Model\ImageInterface')}
+            asset = ${props.asset}
+            width = ${props.imageWidth}
+            async = true
+        }
+    }
+}

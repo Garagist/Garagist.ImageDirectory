@@ -106,26 +106,92 @@ class RawListImplementation extends AbstractFusionObject
         $this->workspace = $startingPoint->getWorkspace()->getName();
         $this->startingPoint = $startingPoint;
         $this->context = $startingPoint->getContext();
-        return $this->getDocumentTree();
+        if (isset($this->items)) {
+            return $this->items;
+        }
+        if ($this->fusionValue('sortBy') == 'document') {
+            return $this->getDocumentTree();
+        }
+        return $this->getAssetTree();
     }
 
     /**
-     * Method which sends the to-be-rendered data
+     * Method which sends the to-be-rendered data, sorted by asset
+     *
+     * @return array
+     * @throws FusionException
+     */
+    public function getAssetTree(): array
+    {
+        $this->buildAssetTree();
+        if (!isset($this->items)) {
+            return [];
+        }
+        return $this->items;
+    }
+
+    /**
+     * Method which sends the to-be-rendered data, sorted by document
      *
      * @return array
      * @throws FusionException
      */
     public function getDocumentTree(): array
     {
-        if (isset($this->items)) {
-            return $this->items;
+        $this->buildDocumentLevelRecursive([$this->startingPoint]);
+        return $this->items;
+    }
+
+    /**
+     * Builds the asset tree
+     *
+     * @return void
+     * @throws FusionException
+     */
+    public function buildAssetTree(): void
+    {
+        $entries = [];
+        foreach ($this->assetUsage as $entityUsage) {
+            $entity = $this->entityUsage($entityUsage);
+            if ($entity == null) {
+                continue;
+            }
+            $id = $entity['id'];
+            $asset =  $entity['asset'];
+            $documentNode =  $entity['documentNode'];
+            $documentNodeIdentifier =  $entity['documentNodeIdentifier'];
+
+            // Set Document Nodetype entry
+            if (!isset($entries[$id]) || !isset($entries[$id]['documents'][$documentNodeIdentifier])) {
+                $documentNodeEntry = [
+                    'node' => $documentNode,
+                    'identifier' => $documentNodeIdentifier,
+                    'label' => $documentNode->getLabel(),
+                    'title' => $documentNode->getProperty('title'),
+                    'nodeType' => $documentNode->getNodeType()->getName(),
+                ];
+            }
+            // Asset is already used and on the same page
+            if (isset($entries[$id])) {
+
+                // Already on the same page, push to document Node
+                if (isset($entries[$id]['documents'][$documentNodeIdentifier])) {
+                    continue;
+                }
+
+                $entries[$id]['documents'][$documentNodeIdentifier] = $documentNodeEntry;
+                continue;
+            }
+
+            $entries[$id] = [
+                'asset' => $asset,
+                'documents' => [
+                    $documentNodeIdentifier => $documentNodeEntry
+                ]
+            ];
         }
 
-        $this->buildDocumentLevelRecursive([$this->startingPoint]);
-        if (!isset($this->items)) {
-            return [];
-        }
-        return $this->items;
+        $this->items = $entries;
     }
 
     /**
@@ -182,39 +248,24 @@ class RawListImplementation extends AbstractFusionObject
         $currentNodeIdentifier = $currentNode->getIdentifier();
         $assetEntries = [];
         foreach ($this->assetUsage as $entityUsage) {
-            $metadata = $entityUsage->getMetadata();
-            $nodeIdentifier = $metadata['nodeIdentifier'];
-            if (
-                !$nodeIdentifier ||
-                $metadata['workspace'] != $this->workspace ||
-                $metadata['dimensions'] != $this->dimensions
-            ) {
+            $entity = $this->entityUsage($entityUsage);
+            if ($entity == null) {
                 continue;
             }
-            $node = $this->context->getNodeByIdentifier($nodeIdentifier);
-            if (!isset($node)) {
-                continue;
-            }
-            $flowQuery = new FlowQuery([$node]);
-            $documentNode = $flowQuery->closest('[instanceof Neos.Neos:Document]')->get(0);
-            if (!isset($documentNode)) {
-                continue;
-            }
-            $documentNodeIdentifier = $documentNode->getIdentifier();
+            $id = $entity['id'];
+            $asset =  $entity['asset'];
+            $documentNode =  $entity['documentNode'];
+            $documentNodeIdentifier =  $entity['documentNodeIdentifier'];
+
             if ($currentNodeIdentifier != $documentNodeIdentifier) {
                 continue;
             }
-            $id = $entityUsage->getEntityId();
+
             if (isset($assetEntries[$id])) {
                 continue;
             }
 
-            /** @var AssetInterface $asset */
-            $asset = $this->assetRepository->findByIdentifier($id);
-
-            if ($this->assetHasCorrectMediaType($asset)) {
-                $assetEntries[$id] = $asset;
-            }
+            $assetEntries[$id] = $asset;
         }
 
         if (count($assetEntries)) {
@@ -255,5 +306,52 @@ class RawListImplementation extends AbstractFusionObject
         }
 
         return false;
+    }
+
+    /**
+     * @param array $entityUsage
+     * @return array|null
+     */
+    protected function entityUsage($entityUsage): ?array
+    {
+        $metadata = $entityUsage->getMetadata();
+        $nodeIdentifier = $metadata['nodeIdentifier'];
+        if (
+            !$nodeIdentifier ||
+            $metadata['workspace'] != $this->workspace ||
+            $metadata['dimensions'] != $this->dimensions
+        ) {
+            return null;
+        }
+
+        $node = $this->context->getNodeByIdentifier($nodeIdentifier);
+
+        if (!isset($node)) {
+            return null;
+        }
+
+        $flowQuery = new FlowQuery([$node]);
+        $documentNode = $flowQuery->closest('[instanceof Neos.Neos:Document]')->get(0);
+
+        if (!isset($documentNode)) {
+            return null;
+        }
+
+        $id = $entityUsage->getEntityId();
+        $documentNodeIdentifier = $documentNode->getIdentifier();
+
+        /** @var AssetInterface $asset */
+        $asset = $this->assetRepository->findByIdentifier($id);
+
+        if (!$this->assetHasCorrectMediaType($asset)) {
+            return null;
+        }
+
+        return [
+            'id' => $id,
+            'asset' => $asset,
+            'documentNode' => $documentNode,
+            'documentNodeIdentifier' => $documentNodeIdentifier,
+        ];
     }
 }

@@ -1,0 +1,16 @@
+prototype(Garagist.ImageDirectory:Helper.DocumentDataStructure) < prototype(Neos.Fusion:Component) {
+    document = null
+    @if.hasDocument = ${this.document}
+    renderer = Neos.Fusion:DataStructure {
+        @ignoreProperties = ${['document']}
+        @apply.props = ${props}
+        nodeUri = Neos.Neos:NodeUri {
+            node = ${props.document.node}
+        }
+        label = ${props.document.label}
+        title = ${props.document.title}
+        identifier = ${props.document.identifier}
+        nodeType = ${props.document.nodeType}
+        node = ${props.document.node}
+    }
+}

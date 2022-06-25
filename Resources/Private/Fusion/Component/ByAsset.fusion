@@ -1,0 +1,33 @@
+prototype(Garagist.ImageDirectory:ByAsset) < prototype(Neos.Fusion:Component) {
+    @propTypes {
+        prefixCopyright = ${PropTypes.string}
+        defaultCopyright = ${PropTypes.string}
+        imageWidth = ${PropTypes.integer}
+    }
+
+    rawList = Garagist.ImageDirectory:Helper.RawList {
+        sortBy = 'asset'
+    }
+
+    prefixCopyright = ${Configuration.setting('Garagist.ImageDirectory.prefixCopyright')}
+    defaultCopyright = ${Configuration.setting('Garagist.ImageDirectory.defaultCopyright')}
+    imageWidth = ${Configuration.setting('Garagist.ImageDirectory.imageWidth')}
+
+    renderer = Neos.Fusion:Map {
+        @process.filter = ${Array.filter(value)}
+        items = ${props.rawList}
+        itemRenderer = Garagist.ImageDirectory:Helper.AssetDataStructure {
+            asset = ${item.asset}
+            defaultCopyright = ${props.defaultCopyright}
+            prefixCopyright = ${props.prefixCopyright}
+            imageWidth = ${props.imageWidth}
+            documents = Neos.Fusion:Map {
+                @process.filter = ${Array.filter(value)}
+                items = ${item.documents}
+                itemRenderer = Garagist.ImageDirectory:Helper.DocumentDataStructure {
+                    document = ${item}
+                }
+            }
+        }
+    }
+}

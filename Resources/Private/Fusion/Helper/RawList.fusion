@@ -1,8 +1,10 @@
-prototype(Garagist.ImageDirectory:RawList) {
+prototype(Garagist.ImageDirectory:Helper.RawList) {
     @class = 'Garagist\\ImageDirectory\\Fusion\\RawListImplementation'
 
     startingPoint = ${site}
     renderHiddenInIndex = true
+    # Can be document or asset
+    sortBy = null
 
     # Comma seperated list
     mediaTypes = 'image/*,video/*'
