@@ -4,7 +4,7 @@ prototype(Garagist.ImageDirectory:Helper.RawList) {
     startingPoint = ${site}
     renderHiddenInIndex = true
     # Can be document or asset
-    sortBy = null
+    sortBy = ${null}
 
     # Comma seperated list
     mediaTypes = 'image/*,video/*'

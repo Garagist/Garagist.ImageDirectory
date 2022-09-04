@@ -1,8 +1,8 @@
 prototype(Garagist.ImageDirectory:Helper.AssetDataStructure) < prototype(Neos.Fusion:Component) {
-    asset = null
-    defaultCopyright = null
-    prefixCopyright = null
-    imageWidth = null
+    asset = ${null}
+    defaultCopyright = ${null}
+    prefixCopyright = ${null}
+    imageWidth = ${null}
 
     @if.hasAsset = ${this.asset}
     renderer = Neos.Fusion:DataStructure {

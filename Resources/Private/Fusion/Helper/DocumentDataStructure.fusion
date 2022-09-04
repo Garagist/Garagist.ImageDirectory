@@ -1,5 +1,5 @@
 prototype(Garagist.ImageDirectory:Helper.DocumentDataStructure) < prototype(Neos.Fusion:Component) {
-    document = null
+    document = ${null}
     @if.hasDocument = ${this.document}
     renderer = Neos.Fusion:DataStructure {
         @ignoreProperties = ${['document']}
