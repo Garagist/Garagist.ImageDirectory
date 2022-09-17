@@ -1,6 +1,6 @@
 {
     "name": "garagist/imagedirectory",
-    "description": "Returns DataStructure for used images on a website",
+    "description": "Returns DataStructure for used images on a Neos CMS website",
     "type": "neos-plugin",
     "license": "GPL-3.0-or-later",
     "require": {
@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Garagist\\ImageDirectory\\": "Classes/"
+            "Garagist\\ImageDirectory\\": "Classes"
         }
     }
 }
