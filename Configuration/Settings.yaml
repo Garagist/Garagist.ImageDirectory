@@ -6,6 +6,6 @@ Neos:
 
 Garagist:
   ImageDirectory:
-    prefixCopyright: '© '
+    prefixCopyright: "© "
     defaultCopyright: null
     imageWidth: 200
