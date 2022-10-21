@@ -139,7 +139,7 @@ class RawListImplementation extends AbstractFusionObject
     public function getDocumentTree(): array
     {
         $this->buildDocumentLevelRecursive([$this->startingPoint]);
-        return $this->items;
+        return $this->items ?? [];
     }
 
     /**
