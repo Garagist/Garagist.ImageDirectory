@@ -127,7 +127,7 @@ class RawListImplementation extends AbstractFusionObject
         if (!isset($this->items)) {
             return [];
         }
-        return $this->items;
+        return $this->items ?? [];
     }
 
     /**
@@ -199,7 +199,7 @@ class RawListImplementation extends AbstractFusionObject
      *
      * @return boolean
      */
-    public function getRenderHiddenInIndex()
+    public function getRenderHiddenInIndex(): bool
     {
         if ($this->renderHiddenInIndex === null) {
             $this->renderHiddenInIndex = (bool)$this->fusionValue('renderHiddenInIndex');
@@ -213,7 +213,7 @@ class RawListImplementation extends AbstractFusionObject
      *
      * @return string
      */
-    public function getFilter()
+    public function getFilter(): string
     {
         $filter = $this->fusionValue('filter');
         if ($filter === null) {
