@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2"
+    xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file original="" product-name="Garagist.ImageDirectory" source-language="en" datatype="plaintext">
+        <body>
+            <trans-unit id="groups.imageDirectory" xml:space="preserve">
+                <source>Settings image directory</source>
+            </trans-unit>
+            <trans-unit id="properties.imageDirectoryPrefixCopyright" xml:space="preserve">
+                <source>Prefix copyright</source>
+            </trans-unit>
+            <trans-unit id="properties.imageDirectoryDefaultCopyright" xml:space="preserve">
+                <source>Default copyright</source>
+            </trans-unit>
+            <trans-unit id="properties.imageDirectoryImageWidth" xml:space="preserve">
+                <source>Image width</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

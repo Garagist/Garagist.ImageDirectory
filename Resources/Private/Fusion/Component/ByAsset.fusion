@@ -9,17 +9,19 @@ prototype(Garagist.ImageDirectory:ByAsset) < prototype(Neos.Fusion:Component) {
         sortBy = 'asset'
     }
 
-    prefixCopyright = ${Configuration.setting('Garagist.ImageDirectory.prefixCopyright')}
-    defaultCopyright = ${Configuration.setting('Garagist.ImageDirectory.defaultCopyright')}
-    imageWidth = ${Configuration.setting('Garagist.ImageDirectory.imageWidth')}
+    node = ${node}
+
+    prefixCopyright = ${q(this.node).property('imageDirectoryPrefixCopyright')}
+    defaultCopyright = ${q(this.node).property('imageDirectoryDefaultCopyright')}
+    imageWidth = ${q(this.node).property('imageDirectoryImageWidth')}
 
     renderer = Neos.Fusion:Map {
         @process.filter = ${Array.filter(value)}
         items = ${props.rawList}
         itemRenderer = Garagist.ImageDirectory:Helper.AssetDataStructure {
             asset = ${item.asset}
-            defaultCopyright = ${props.defaultCopyright}
             prefixCopyright = ${props.prefixCopyright}
+            defaultCopyright = ${props.defaultCopyright}
             imageWidth = ${props.imageWidth}
             documents = Neos.Fusion:Map {
                 @process.filter = ${Array.filter(value)}
