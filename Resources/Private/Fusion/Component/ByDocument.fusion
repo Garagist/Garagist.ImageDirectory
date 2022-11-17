@@ -26,7 +26,7 @@ prototype(Garagist.ImageDirectory:ByDocument) < prototype(Neos.Fusion:Component)
                 @process.filter = ${Array.filter(value)}
                 items = ${item.assets}
                 itemRenderer = Garagist.ImageDirectory:Helper.AssetDataStructure {
-                    @if.notIgnore = ${Array.indexOf(props.ignoreAssets, item) == -1}
+                    @if.notIgnore = ${Array.indexOf(props.ignoreAssets || [], item) == -1}
                     asset = ${item}
                     prefixCopyright = ${props.prefixCopyright}
                     defaultCopyright = ${props.defaultCopyright}
