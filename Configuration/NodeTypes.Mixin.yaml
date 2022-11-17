@@ -40,3 +40,11 @@
             max: 600
             step: 10
             unit: px
+    imageDirectoryIgnoreAssets:
+      type: array<Neos\Media\Domain\Model\Asset>
+      ui:
+        label: i18n
+        reloadPageIfChanged: true
+        inspector:
+          group: imageDirectory
+          position: 40

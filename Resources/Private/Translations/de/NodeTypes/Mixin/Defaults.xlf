@@ -19,6 +19,10 @@
                 <source>Image width</source>
                 <target>Bilderbreite</target>
             </trans-unit>
+            <trans-unit id="properties.imageDirectoryIgnoreAssets" xml:space="preserve">
+                <source>Ignore assets</source>
+                <target>Assets ignorieren</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -14,16 +14,19 @@ prototype(Garagist.ImageDirectory:ByDocument) < prototype(Neos.Fusion:Component)
     prefixCopyright = ${q(this.node).property('imageDirectoryPrefixCopyright')}
     defaultCopyright = ${q(this.node).property('imageDirectoryDefaultCopyright')}
     imageWidth = ${q(this.node).property('imageDirectoryImageWidth')}
+    ignoreAssets = ${q(this.node).property('imageDirectoryIgnoreAssets')}
 
     renderer = Neos.Fusion:Map {
         @process.filter = ${Array.filter(value)}
         items = ${props.rawList}
         itemRenderer = Garagist.ImageDirectory:Helper.DocumentDataStructure {
+            @if.hasAssets = ${Array.length(this.assets)}
             document = ${item}
             assets = Neos.Fusion:Map {
                 @process.filter = ${Array.filter(value)}
                 items = ${item.assets}
                 itemRenderer = Garagist.ImageDirectory:Helper.AssetDataStructure {
+                    @if.notIgnore = ${Array.indexOf(props.ignoreAssets, item) == -1}
                     asset = ${item}
                     prefixCopyright = ${props.prefixCopyright}
                     defaultCopyright = ${props.defaultCopyright}
