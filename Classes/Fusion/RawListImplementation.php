@@ -88,6 +88,13 @@ class RawListImplementation extends AbstractFusionObject
     protected $context;
 
     /**
+     * List of the site identifiers. Used by showBy asset, to filter out picutres from other sites
+     *
+     * @var array
+     */
+    protected $currentSiteNodeIdentifierArray;
+
+    /**
      * Returns the items as result of the fusion object.
      *
      * @return array
@@ -150,6 +157,7 @@ class RawListImplementation extends AbstractFusionObject
      */
     public function buildAssetTree(): void
     {
+        $this->buildDocumentIdenifierListRecursive([$this->startingPoint]);
         $entries = [];
         foreach ($this->assetUsage as $entityUsage) {
             $entity = $this->entityUsage($entityUsage);
@@ -160,6 +168,10 @@ class RawListImplementation extends AbstractFusionObject
             $asset =  $entity['asset'];
             $documentNode =  $entity['documentNode'];
             $documentNodeIdentifier =  $entity['documentNodeIdentifier'];
+
+            if (!in_array($documentNodeIdentifier, $this->currentSiteNodeIdentifierArray)) {
+                continue;
+            }
 
             // Set Document Nodetype entry
             if (!isset($entries[$id]) || !isset($entries[$id]['documents'][$documentNodeIdentifier])) {
@@ -223,6 +235,22 @@ class RawListImplementation extends AbstractFusionObject
     }
 
     /**
+     * Bild the list with document identifiers
+     *
+     * @param array $nodes
+     * @return void
+     */
+    protected function buildDocumentIdenifierListRecursive(array $nodes): void
+    {
+        foreach ($nodes as $currentNode) {
+            if ($currentNode->isVisible() && $currentNode->isAccessible()) {
+                $this->currentSiteNodeIdentifierArray[] = $currentNode->getIdentifier();
+                $this->buildDocumentIdenifierListRecursive($currentNode->getChildNodes($this->getFilter()));
+            }
+        }
+    }
+
+    /**
      * @param array $nodes
      * @return void
      */
@@ -254,7 +282,6 @@ class RawListImplementation extends AbstractFusionObject
             }
             $id = $entity['id'];
             $asset =  $entity['asset'];
-            $documentNode =  $entity['documentNode'];
             $documentNodeIdentifier =  $entity['documentNodeIdentifier'];
 
             if ($currentNodeIdentifier != $documentNodeIdentifier) {
