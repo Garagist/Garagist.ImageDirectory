@@ -29,19 +29,10 @@ This package provides two main Fusion prototypes, which returns a `Neos.Fusion:D
 
 With this data you can create your own view to output the assets. It is recomended to create a dedicated page and put it next to your imprint, etc.
 
-## Settings
+## Node Types
 
-This package comes with some basic settings:
+This package provide one mixin: `Garagist.ImageDirectory:Mixin.Defaults`. This sets the defaults, as the image width, the prefix for the copyright text as well as the value if no `copyrightNotice` is set on the asset.
 
-```yaml
-Garagist:
-  ImageDirectory:
-    prefixCopyright: "© "
-    defaultCopyright: null
-    imageWidth: 200
-```
-
-As the copyright information is saved in the `copyrightNotice` of the asset, it is possible that there is no text set. In that case, the text from the setting `Garagist.ImageDirectory.defaultCopyright` will be used.
 
 [packagist]: https://packagist.org/packages/garagist/imagedirectory
 [latest stable version]: https://poser.pugx.org/garagist/imagedirectory/v/stable
