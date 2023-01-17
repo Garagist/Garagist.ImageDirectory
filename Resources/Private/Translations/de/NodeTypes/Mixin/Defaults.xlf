@@ -13,7 +13,7 @@
             </trans-unit>
             <trans-unit id="properties.imageDirectoryDefaultCopyright" xml:space="preserve">
                 <source>Default copyright</source>
-                <target>Standartcopyright</target>
+                <target>Standardcopyright</target>
             </trans-unit>
             <trans-unit id="properties.imageDirectoryImageWidth" xml:space="preserve">
                 <source>Image width</source>
