@@ -23,6 +23,10 @@
                 <source>Ignore assets</source>
                 <target>Assets ignorieren</target>
             </trans-unit>
+            <trans-unit id="properties.imageDirectoryIgnoreDocuments" xml:space="preserve">
+                <source>Ignore pages</source>
+                <target>Seiten ignorieren</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

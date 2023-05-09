@@ -15,10 +15,11 @@ prototype(Garagist.ImageDirectory:ByDocument) < prototype(Neos.Fusion:Component)
     defaultCopyright = ${q(this.node).property('imageDirectoryDefaultCopyright')}
     imageWidth = ${q(this.node).property('imageDirectoryImageWidth')}
     ignoreAssets = ${q(this.node).property('imageDirectoryIgnoreAssets')}
+    ignoreDocuments = ${q(this.node).property('imageDirectoryIgnoreDocuments')}
 
     renderer = Neos.Fusion:Map {
         @process.filter = ${Array.filter(value)}
-        items = ${props.rawList}
+        items = ${Array.filter(props.rawList, item => Array.indexOf(props.ignoreDocuments || [], item.node) == -1)}
         itemRenderer = Garagist.ImageDirectory:Helper.DocumentDataStructure {
             @if.hasAssets = ${Array.length(this.assets)}
             document = ${item}

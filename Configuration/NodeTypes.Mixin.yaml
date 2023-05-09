@@ -48,3 +48,11 @@
         inspector:
           group: imageDirectory
           position: 40
+    imageDirectoryIgnoreDocuments:
+      type: references
+      ui:
+        label: i18n
+        reloadPageIfChanged: true
+        inspector:
+          group: imageDirectory
+          position: 50
