@@ -17,9 +17,11 @@ prototype(Garagist.ImageDirectory:ByDocument) < prototype(Neos.Fusion:Component)
     ignoreAssets = ${q(this.node).property('imageDirectoryIgnoreAssets')}
     ignoreDocuments = ${q(this.node).property('imageDirectoryIgnoreDocuments')}
 
+    filter = '[!instanceof Neos.Neos:Shortcut]'
+
     renderer = Neos.Fusion:Map {
         @process.filter = ${Array.filter(value)}
-        items = ${Array.filter(props.rawList, item => Array.indexOf(props.ignoreDocuments || [], item.node) == -1)}
+        items = ${Array.filter(props.rawList, item => (props.filter ? q(item.node).is(props.filter) : true) && Array.indexOf(props.ignoreDocuments || [], item.node) == -1)}
         itemRenderer = Garagist.ImageDirectory:Helper.DocumentDataStructure {
             @if.hasAssets = ${Array.length(this.assets)}
             document = ${item}

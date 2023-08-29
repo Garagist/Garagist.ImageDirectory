@@ -10,5 +10,5 @@ prototype(Garagist.ImageDirectory:Helper.RawList) {
     mediaTypes = 'image/*,video/*'
 
     # Comma seperated list
-    filter = 'Neos.Neos:Document,!Neos.Neos:Shortcut'
+    filter = 'Neos.Neos:Document'
 }
