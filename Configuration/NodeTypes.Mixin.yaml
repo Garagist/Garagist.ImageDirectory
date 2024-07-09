@@ -10,7 +10,7 @@
   properties:
     imageDirectoryPrefixCopyright:
       type: string
-      defaultValue: ©
+      defaultValue: '© '
       ui:
         label: i18n
         reloadPageIfChanged: true
