@@ -8,3 +8,11 @@ Neos:
         autoInclude:
           Garagist.ImageDirectory:
             - 'NodeTypes/*'
+
+Garagist:
+  ImageDirectory:
+    # List of filenames who should be always ignored. Case-insensitive.
+    ignoreFilenames:
+      'favicon.ico': true
+      'favicon.png': true
+      'apple-touch-icon.png': true

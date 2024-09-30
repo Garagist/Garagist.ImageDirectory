@@ -67,6 +67,13 @@ class RawListImplementation extends AbstractFusionObject
     protected $assetUsage;
 
     /**
+    * Internal cache for the ignored filenames.
+    *
+    * @var array
+    */
+    protected $ignoreFilenames;
+
+    /**
      * Internal cache for the used dimensions
      *
      * @var string
@@ -83,7 +90,7 @@ class RawListImplementation extends AbstractFusionObject
     /**
      * Internal cache for the context
      *
-     * @var array
+     * @var object
      */
     protected $context;
 
@@ -93,6 +100,24 @@ class RawListImplementation extends AbstractFusionObject
      * @var array
      */
     protected $currentSiteNodeIdentifierArray;
+
+    protected function getIgnoreFilenames(): array
+    {
+        $ignoreFilenames = $this->fusionValue('ignoreFilenames');
+
+        if (!is_array($ignoreFilenames)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($ignoreFilenames as $ignoredFile => $value) {
+            if ($value) {
+                $result[] = strtolower($ignoredFile);
+            }
+        }
+
+        return array_unique($result);
+    }
 
     /**
      * Returns the items as result of the fusion object.
@@ -113,6 +138,7 @@ class RawListImplementation extends AbstractFusionObject
         $this->workspace = $startingPoint->getWorkspace()->getName();
         $this->startingPoint = $startingPoint;
         $this->context = $startingPoint->getContext();
+        $this->ignoreFilenames = $this->getIgnoreFilenames();
         if (isset($this->items)) {
             return $this->items;
         }
@@ -336,7 +362,7 @@ class RawListImplementation extends AbstractFusionObject
     }
 
     /**
-     * @param array $entityUsage
+     * @param object $entityUsage
      * @return array|null
      */
     protected function entityUsage($entityUsage): ?array
@@ -369,6 +395,11 @@ class RawListImplementation extends AbstractFusionObject
 
         /** @var AssetInterface $asset */
         $asset = $this->assetRepository->findByIdentifier($id);
+
+        $filename = strtolower($asset->getResource()->getFilename());
+        if (in_array($filename, $this->ignoreFilenames)) {
+            return null;
+        }
 
         if (!$this->assetHasCorrectMediaType($asset)) {
             return null;

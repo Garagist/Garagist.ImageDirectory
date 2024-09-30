@@ -6,6 +6,8 @@ prototype(Garagist.ImageDirectory:Helper.RawList) {
     # Can be document or asset
     sortBy = ${null}
 
+    ignoreFilenames = ${Configuration.setting('Garagist.ImageDirectory.ignoreFilenames')}
+
     # Comma seperated list
     mediaTypes = 'image/*,video/*'
 
